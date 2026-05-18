@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:splitbill_ai/features/dashboard/screens/dashboard_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,14 +13,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'SplitBill AI',
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('SplitBill AI'),
-        ),
-        body: const Center(
-          child: Text('Hello SplitBill'),
-        ),
-      ),
+      home: const DashboardScreen(),
     );
   }
 }
