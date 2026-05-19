@@ -5,6 +5,7 @@ import '../../../shared/widgets/week_calendar_picker.dart';
 import '../../../shared/widgets/quick_action_button.dart';
 import '../../../shared/widgets/section_header.dart';
 import '../widgets/group_card.dart';
+import 'group_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -68,24 +69,30 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   const SizedBox(height: AppSpacing.lg),
 
                   // 4. Your Groups
-                  SectionHeader(
-                    title: 'Your Groups',
-                    onActionTap: () {
-                      // TODO: navigate to all groups
-                    },
-                  ),
+                 SectionHeader(
+                        title: 'Your Groups',
+                        onActionTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => const GroupScreen()),
+                          );
+                        },
+                      ),
                   const SizedBox(height: AppSpacing.md),
                   _buildYourGroups(),
 
                   const SizedBox(height: AppSpacing.lg),
 
                   // 5. Other Groups
-                  SectionHeader(
-                    title: 'Other Groups',
-                    onActionTap: () {
-                      // TODO: navigate to other groups
-                    },
-                  ),
+                SectionHeader(
+                            title: 'Other Groups',
+                            onActionTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (_) => const GroupScreen()),
+                              );
+                            },
+                          ),
                   const SizedBox(height: AppSpacing.md),
                   _buildOtherGroups(),
 
