@@ -8,7 +8,7 @@ class CreateGroupScreen extends StatefulWidget {
 }
 
 class _CreateGroupScreenState extends State<CreateGroupScreen> {
-  final _formKey = GlobalKey<FormKey>();
+  final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _descController = TextEditingController();
   final _inviteController = TextEditingController();

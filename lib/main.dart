@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:splitbill_ai/widgets/bottom_nav_shell.dart';
-
 void main() {
   runApp(const MyApp());
 }

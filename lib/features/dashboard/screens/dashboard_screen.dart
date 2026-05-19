@@ -5,7 +5,7 @@ import '../../../shared/widgets/week_calendar_picker.dart';
 import '../../../shared/widgets/quick_action_button.dart';
 import '../../../shared/widgets/section_header.dart';
 import '../widgets/group_card.dart';
-import 'group_screen.dart';
+import '../../groups/screens/group_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
