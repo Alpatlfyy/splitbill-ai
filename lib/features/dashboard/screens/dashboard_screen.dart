@@ -187,6 +187,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final groups = [
       {'name': 'Goes To Bali', 'isLeader': true, 'isActive': true},
       {'name': 'Flying Solo', 'isLeader': true, 'isActive': true},
+      {'name': 'Project Kantor', 'isLeader': true, 'isActive': false},
     ];
 
     final gradients = [
@@ -225,33 +226,117 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget _buildOtherGroups() {
     // Dummy data — grup yang user ikut tapi bukan leader
     final otherGroups = [
-      {'name': 'Arisan RT 07', 'isLeader': false, 'isActive': true},
-      {'name': 'Makan Bareng', 'isLeader': false, 'isActive': false},
+      {'name': 'Arisan RT 07', 'subtitle': '8 members', 'isActive': true},
+      {'name': 'Makan Bareng', 'subtitle': '5 members', 'isActive': false},
+      {'name': 'Kosan Project', 'subtitle': '12 members', 'isActive': true},
     ];
 
-    final gradients = [
-      AppColors.cardGradient2,
-      AppColors.cardGradient1,
-    ];
-
-    return SizedBox(
-      height: 180,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        itemCount: otherGroups.length,
-        separatorBuilder: (_, __) => const SizedBox(width: AppSpacing.md),
-        itemBuilder: (context, index) {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.cardWhite,
+        borderRadius: BorderRadius.circular(AppRadius.xl),
+        boxShadow: AppShadows.softShadow,
+      ),
+      child: Column(
+        children: List.generate(otherGroups.length, (index) {
           final group = otherGroups[index];
-          return GroupCard(
-            groupName: group['name'] as String,
-            isLeader: group['isLeader'] as bool,
-            isActive: group['isActive'] as bool,
-            gradient: gradients[index % gradients.length],
-            onTap: () {
-              // TODO: navigate to group detail
-            },
+          final isLast = index == otherGroups.length - 1;
+
+          return Column(
+            children: [
+              _OtherGroupListTile(
+                name: group['name'] as String,
+                subtitle: group['subtitle'] as String,
+                isActive: group['isActive'] as bool,
+                onTap: () {
+                  // TODO: navigate to group detail
+                },
+              ),
+              if (!isLast)
+                Divider(
+                  height: 1,
+                  thickness: 1,
+                  indent: AppSpacing.md,
+                  endIndent: AppSpacing.md,
+                  color: AppColors.dividerColor,
+                ),
+            ],
           );
-        },
+        }),
+      ),
+    );
+  }
+}
+
+class _OtherGroupListTile extends StatelessWidget {
+  final String name;
+  final String subtitle;
+  final bool isActive;
+  final VoidCallback? onTap;
+
+  const _OtherGroupListTile({
+    required this.name,
+    required this.subtitle,
+    required this.isActive,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.md,
+          vertical: AppSpacing.md,
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                color: AppColors.softPurple,
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.groups_rounded,
+                color: AppColors.primaryPurple,
+                size: 24,
+              ),
+            ),
+            const SizedBox(width: AppSpacing.md),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    name,
+                    style: AppTextStyles.heading3,
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    subtitle,
+                    style: AppTextStyles.bodySmall.copyWith(
+                      color: AppColors.textGrey,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: AppSpacing.sm),
+            Container(
+              width: 12,
+              height: 12,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: isActive
+                    ? AppColors.successGreen
+                    : AppColors.textGrey.withOpacity(0.4),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

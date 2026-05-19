@@ -9,6 +9,9 @@ class GroupCard extends StatelessWidget {
   final String? imageUrl;
   final bool isLeader;
   final bool isActive;
+  final int imageCount;
+  final int memberCount;
+  final List<String> memberAvatars;
   final LinearGradient gradient;
   final VoidCallback? onTap;
   final VoidCallback? onSettingsTap;
@@ -21,6 +24,9 @@ class GroupCard extends StatelessWidget {
     this.imageUrl,
     this.isLeader = false,
     this.isActive = true,
+    this.imageCount = 4,
+    this.memberCount = 4,
+    this.memberAvatars = const [],
     this.gradient = AppColors.cardGradient1,
     this.onTap,
     this.onSettingsTap,
@@ -83,15 +89,24 @@ class GroupCard extends StatelessWidget {
 
             const SizedBox(height: AppSpacing.xs),
 
-            // Leader badge
-            if (isLeader) const _LeaderBadge(),
+            _LeaderAndMembersRow(
+              isLeader: isLeader,
+              memberCount: memberCount,
+              memberAvatars: memberAvatars,
+            ),
 
             const Spacer(),
 
-            // Toggle switch
-            _ActiveToggle(
-              isActive: isActive,
-              onToggle: onToggle,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                _ActiveToggle(
+                  isActive: isActive,
+                  onToggle: onToggle,
+                ),
+                _ImageInfoChip(count: imageCount),
+              ],
             ),
           ],
         ),
@@ -157,6 +172,33 @@ class _LeaderBadge extends StatelessWidget {
   }
 }
 
+class _LeaderAndMembersRow extends StatelessWidget {
+  final bool isLeader;
+  final int memberCount;
+  final List<String> memberAvatars;
+
+  const _LeaderAndMembersRow({
+    required this.isLeader,
+    required this.memberCount,
+    required this.memberAvatars,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        if (isLeader) const _LeaderBadge(),
+        _MemberStack(
+          memberCount: memberCount,
+          memberAvatars: memberAvatars,
+        ),
+      ],
+    );
+  }
+}
+
 class _ActiveToggle extends StatelessWidget {
   final bool isActive;
   final VoidCallback? onToggle;
@@ -191,6 +233,136 @@ class _ActiveToggle extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _MemberStack extends StatelessWidget {
+  final int memberCount;
+  final List<String> memberAvatars;
+
+  const _MemberStack({required this.memberCount, required this.memberAvatars});
+
+  @override
+  Widget build(BuildContext context) {
+    final avatarTotal = memberAvatars.isEmpty ? memberCount : memberAvatars.length;
+    final visibleCount = avatarTotal.clamp(2, 4).toInt();
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SizedBox(
+          height: 24,
+          width: (visibleCount * 12.0) + 8,
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              for (var index = 0; index < visibleCount; index++)
+                Positioned(
+                  left: index * 12.0,
+                  child: _MiniAvatar(size: 24),
+                ),
+              if (avatarTotal > visibleCount)
+                Positioned(
+                  left: visibleCount * 12.0,
+                  child: _CountBubble(count: avatarTotal - visibleCount),
+                ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _MiniAvatar extends StatelessWidget {
+  final double size;
+
+  const _MiniAvatar({required this.size});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.white.withOpacity(0.28),
+        border: Border.all(
+          color: Colors.white.withOpacity(0.34),
+          width: 1,
+        ),
+      ),
+      child: Icon(
+        Icons.person,
+        size: size * 0.5,
+        color: Colors.white.withOpacity(0.85),
+      ),
+    );
+  }
+}
+
+class _CountBubble extends StatelessWidget {
+  final int count;
+
+  const _CountBubble({required this.count});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 24,
+      height: 24,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.white.withOpacity(0.18),
+        border: Border.all(color: Colors.white.withOpacity(0.30)),
+      ),
+      child: Center(
+        child: Text(
+          '+$count',
+          style: const TextStyle(
+            fontSize: 9,
+            fontWeight: FontWeight.w700,
+            color: Colors.white,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ImageInfoChip extends StatelessWidget {
+  final int count;
+
+  const _ImageInfoChip({required this.count});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.16),
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.photo_library_outlined,
+            size: 11,
+            color: Colors.white.withOpacity(0.9),
+          ),
+          const SizedBox(width: 4),
+          Text(
+            '$count images',
+            style: const TextStyle(
+              fontSize: 9,
+              fontWeight: FontWeight.w600,
+              color: Colors.white,
+            ),
+          ),
+        ],
       ),
     );
   }
