@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:splitbill_ai/widgets/bottom_nav_shell.dart';
 void main() {
   runApp(const MyApp());
 }
@@ -12,14 +12,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'SplitBill AI',
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('SplitBill AI'),
-        ),
-        body: const Center(
-          child: Text('Hello SplitBill'),
-        ),
-      ),
+      home: const BottomNavShell(),
     );
   }
 }
